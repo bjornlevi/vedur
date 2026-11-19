@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="is">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Veðurfréttir</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="room">
+    <div class="tv">
+      <div class="screen" id="screen">
+        <div class="studio">
+          <div class="stage" id="stage">
+            <div class="mount mount-a" aria-hidden="true"><span class="hub"></span></div>
+            <div class="mount mount-b" aria-hidden="true"><span class="hub"></span></div>
+            <div class="prism" id="prism">
+              <section class="face" style="--i:0" aria-label="Veðrið í dag"><svg id="face0" viewBox="0 0 800 600"></svg></section>
+              <section class="face" style="--i:1" aria-label="Veðurkort yfir Atlantshafi"><svg id="face1" viewBox="0 0 800 600"></svg></section>
+              <section class="face" style="--i:2" aria-label="Spá fyrir morgundaginn"><svg id="face2" viewBox="0 0 800 600"></svg></section>
+              <section class="face" style="--i:3" aria-label="Horfur næstu daga"><svg id="face3" viewBox="0 0 800 600"></svg></section>
+            </div>
+          </div>
+        </div>
+        <div class="intro" id="intro">
+          <div class="intro-title">Veður</div>
+          <div class="intro-sub" id="introSub">Sæki veðurgögn…</div>
+        </div>
+        <div class="crt" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <nav class="controls" aria-label="Stjórnun">
+      <button id="prev" title="Fyrra kort (←)">◀</button>
+      <div class="dots" id="dots">
+        <button data-go="0">Í dag</button>
+        <button data-go="1">Veðurkort</button>
+        <button data-go="2">Á morgun</button>
+        <button data-go="3">Horfur</button>
+      </div>
+      <button id="next" title="Næsta kort (→)">▶</button>
+      <span class="sep"></span>
+      <label class="toggle"><input type="checkbox" id="auto"> Sjálfvirkt</label>
+      <label class="toggle"><input type="checkbox" id="crtToggle" checked> Gamalt sjónvarp</label>
+      <label class="toggle"><input type="checkbox" id="sound"> Hljóð</label>
+    </nav>
+    <p class="note">Veðurgögn: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · Kortagrunnur: Natural Earth · Örvatakkar eða smellur á kortið snúa spjaldinu.</p>
+  </main>
+
+  <svg id="defs" width="0" height="0" style="position:absolute" aria-hidden="true"><defs></defs></svg>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+  <script>window.VEDUR = {{ {'data': url_for('data_file', filename='vedur.json'), 'world': url_for('data_file', filename='countries-50m.json')} | tojson }};</script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
