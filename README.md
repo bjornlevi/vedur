@@ -22,7 +22,7 @@ make dev         # þróunarþjónn á http://localhost:5003
 ## Á vefþjóni (bjornlevi.is/vedur)
 
 Uppsetningarskrár eru í `deploy/` (nginx + gunicorn + systemd, eins og opin-gogn).
-Appið hlustar á `127.0.0.1:8018`.
+Appið hlustar á `127.0.0.1:8019`.
 
 ```bash
 # 1. Kóði og umhverfi

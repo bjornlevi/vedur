@@ -7,7 +7,7 @@ WorkingDirectory=/srv/vedur
 
 EnvironmentFile=/etc/default/vedur
 
-ExecStart=/srv/vedur/.venv/bin/gunicorn --chdir /srv/vedur --workers 2 --bind 127.0.0.1:8018 wsgi:app
+ExecStart=/srv/vedur/.venv/bin/gunicorn --chdir /srv/vedur --workers 2 --bind 127.0.0.1:8019 wsgi:app
 
 # User/group and restarts
 User=web
