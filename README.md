@@ -21,19 +21,39 @@ make dev         # þróunarþjónn á http://localhost:5003
 
 ## Á vefþjóni (bjornlevi.is/vedur)
 
+Uppsetningarskrár eru í `deploy/` (nginx + gunicorn + systemd, eins og opin-gogn).
+Appið hlustar á `127.0.0.1:8018`.
+
 ```bash
-PREFIX=/vedur .venv/bin/gunicorn wsgi:app
+# 1. Kóði og umhverfi
+sudo git clone https://github.com/bjornlevi/vedur.git /srv/vedur
+cd /srv/vedur
+sudo python3 -m venv .venv
+sudo .venv/bin/pip install -r requirements.txt
+sudo mkdir -p data
+sudo chown -R web:www-data /srv/vedur
+
+# 2. Stillingar og þjónustur
+sudo cp deploy/vedur.env /etc/default/vedur
+sudo cp deploy/vedur.service deploy/vedur-fetch.service deploy/vedur-fetch.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl start vedur-fetch.service          # fyrsta söfnun strax
+sudo systemctl enable --now vedur.service vedur-fetch.timer
+
+# 3. nginx: bæta deploy/nginx-vedur.conf inn í server-blokkina
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
-`PREFIX` stýrir öllum slóðum (static, gögn), eins og í opin_gogn.
+Gögnin eru sótt daglega kl. 18 (`vedur-fetch.timer`). Fyrsta kortið sýnir
+veðrið eins og það var þá. Gagnlegar skipanir:
 
-Gögnin eru uppfærð daglega með cron, t.d. kl. 18:
-
+```bash
+systemctl list-timers vedur-fetch.timer           # hvenær næst
+journalctl -u vedur-fetch.service -n 20           # síðasta söfnun
+journalctl -u vedur.service -f                    # vefþjónninn
 ```
-0 18 * * * cd /slóð/að/vedur && make pipeline >> data/fetch.log 2>&1
-```
 
-Fyrsta kortið sýnir veðrið eins og það var þegar `make pipeline` keyrði.
+Uppfærsla: `cd /srv/vedur && sudo -u web git pull && sudo systemctl restart vedur`.
 
 ## Skrár
 
@@ -44,6 +64,7 @@ Fyrsta kortið sýnir veðrið eins og það var þegar `make pipeline` keyrði.
 | `templates/index.html` | Síðan |
 | `static/app.js` | Teiknar kortin og snýr tromlunni |
 | `static/style.css` | Útlit (sjónvarp, tromla, stöng) |
+| `deploy/` | systemd-þjónustur, timer, nginx og umhverfisskrá |
 | `data/` | Myndað af `make pipeline`, ekki í git |
 
 Kortagrunnur: Natural Earth í gegnum [world-atlas](https://github.com/topojson/world-atlas).

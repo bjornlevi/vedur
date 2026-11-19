@@ -1,0 +1,12 @@
+[Unit]
+Description=Vedur: sækja veðurgögn einu sinni á dag
+
+[Timer]
+# Kl. 18 eftir klukku þjónsins. Persistent=true keyrir söfnunina strax
+# ef þjónninn var niðri á þeim tíma.
+OnCalendar=*-*-* 18:00:00
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

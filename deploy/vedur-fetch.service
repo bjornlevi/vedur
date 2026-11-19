@@ -1,0 +1,14 @@
+[Unit]
+Description=Vedur: sækja veðurgögn dagsins frá Open-Meteo
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/vedur
+EnvironmentFile=/etc/default/vedur
+ExecStart=/srv/vedur/.venv/bin/python3 scripts/fetch_data.py
+User=web
+Group=www-data
+StandardOutput=journal
+StandardError=journal
