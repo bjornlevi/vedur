@@ -157,7 +157,8 @@
     const grp = el(g, 'g', { filter: 'url(#magnet)', stroke: '#141414', 'stroke-width': sw, 'stroke-linecap': 'round', fill: 'none' });
     let d = `M${x0} ${y0}L${x1} ${y1}`;
     // Fjaðrir: heil fjöður = 2 vindstig, hálf = 1
-    const fx = Math.cos(a + Math.PI / 3 + Math.PI / 2), fy = Math.sin(a + Math.PI / 3 + Math.PI / 2);
+    // Halla út frá stöðinni (60° frá skaftinu), eins og fjaðrir aftast á ör
+    const fx = Math.cos(a - 5 * Math.PI / 6), fy = Math.sin(a - 5 * Math.PI / 6);
     const full = Math.floor(bf / 2), half = bf % 2;
     const gap = 5.5 * scale, fl = 13 * scale;
     for (let i = 0; i < full + half; i++) {
